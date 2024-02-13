@@ -6,7 +6,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.2.2</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/> 
 	</parent>
 	<groupId>clima</groupId>
 	<artifactId>climaapi</artifactId>
@@ -81,10 +81,9 @@
 		<dependency>
            <groupId>org.mockito</groupId>
            <artifactId>mockito-core</artifactId>
-           <version>3.12.4</version> <!-- La última versión disponible en el momento -->
+           <version>3.12.4</version> 
            <scope>test</scope>
         </dependency>
-    <!-- Spring Test MVC -->
         <dependency>
            <groupId>org.springframework</groupId>
            <artifactId>spring-test</artifactId>

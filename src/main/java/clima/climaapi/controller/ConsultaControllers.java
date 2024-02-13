@@ -45,9 +45,9 @@ public class ConsultaControllers {
     @PostMapping("/consulta")
     public ResponseEntity<ClimaData> consultarClima(@RequestParam("ciudad") String ciudad) {
         if (!rateLimiter.tryAcquire()) {
-            // Si no se puede adquirir el permiso, devolver un error 429 Too Many Requests
+            
             return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(null);
-        }
+       }
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
 
@@ -98,7 +98,7 @@ public class ConsultaControllers {
 
         if (!rateLimiter.tryAcquire()) {
             // Si no se puede adquirir el permiso, devolver un error 429 Too Many Requests
-            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(null);
+           return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(null);
         }
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();

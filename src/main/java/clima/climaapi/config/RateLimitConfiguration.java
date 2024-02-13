@@ -11,7 +11,7 @@ import com.google.common.util.concurrent.RateLimiter;
 @EnableScheduling
 public class RateLimitConfiguration {
     
-    private static final int REQUESTS_PER_HOUR = 100;
+    private static final int REQUESTS_PER_HOUR = 1000;
 
     private final RateLimiter rateLimiter = RateLimiter.create(REQUESTS_PER_HOUR / 3600.0);
     @Scheduled(fixedRate = 3600000) 

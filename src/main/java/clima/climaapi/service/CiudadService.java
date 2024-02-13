@@ -10,6 +10,8 @@ import clima.climaapi.repository.CiudadRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -28,6 +30,9 @@ public class CiudadService {
 
     @Autowired
     private CiudadRepository ciudadRepository;
+
+    @Autowired
+    private CacheManager cacheManager;
 
     public CiudadService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
@@ -53,11 +58,12 @@ public class CiudadService {
         Ciudad ciudadRegistrada = ciudadRepository.save(nuevaCiudad);
         return ciudadRegistrada.getId();
     }
+
     private void saveWeatherData(ClimaData weatherData) {
         String cityName = weatherData.getName();
-
+    
         Optional<Ciudad> existingCityOptional = ciudadRepository.findByNombre(cityName);
-
+    
         if (existingCityOptional.isPresent()) {
             Ciudad existingCity = existingCityOptional.get();
             actualizarDatosClima(existingCity, weatherData);
@@ -67,8 +73,15 @@ public class CiudadService {
             newCity.setLatitud(weatherData.getCoord().getLat());
             newCity.setLongitud(weatherData.getCoord().getLon());
             ciudadRepository.save(newCity);
+            
+            // Invalidar la entrada de la caché correspondiente a la nueva ciudad
+            Cache cache = cacheManager.getCache("weatherData");
+            if (cache != null) {
+                cache.evict(cityName);
+            }
         }
     }
+    
 
     private void actualizarDatosClima(Ciudad ciudad, ClimaData weatherData) {
 
